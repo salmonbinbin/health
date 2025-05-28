@@ -127,15 +127,16 @@ const viewHistory = async (type) => {
       .filter(record => 
         record && 
         record.type === type && 
-        record.createdAt && 
-        isValidDate(record.createdAt)
+        record.value &&
+        (record.date || record.createdAt) && 
+        isValidDate(record.date || record.createdAt)
       )
       .map(record => ({
         id: record.id || Date.now().toString(),
         type: record.type,
-        value: record.value,
-        unit: record.unit || '',
-        createdAt: record.createdAt,
+        value: Number(record.value),
+        unit: record.unit || indicatorMap[record.type]?.unit || '',
+        createdAt: record.createdAt || record.date,
         date: record.date || record.createdAt.split('T')[0],
         remark: record.remark || ''
       }))
@@ -145,6 +146,8 @@ const viewHistory = async (type) => {
 
     if (validRecords.length === 0) {
       console.warn('没有找到有效的历史记录')
+      ElMessage.warning('暂无历史记录')
+      return
     }
 
     historyRecords.value = validRecords
@@ -238,17 +241,29 @@ onMounted(fetchRecords)
       v-model="showHistoryDialog"
       :title="`${currentIndicator?.name}历史记录`"
       width="60%"
+      class="history-dialog"
     >
-      <el-table :data="historyRecords">
+      <el-table 
+        :data="historyRecords"
+        stripe
+        border
+        class="history-table"
+      >
         <el-table-column label="记录值" min-width="150">
           <template #default="{ row }">
-            {{ row.value }} {{ row.unit }}
+            <span class="record-value">{{ row.value }} {{ row.unit }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="时间" min-width="200">
           <template #default="{ row }">
-            {{ formatRecordDate(row) }}
+            <span class="record-time">{{ formatRecordDate(row) }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="备注" min-width="200">
+          <template #default="{ row }">
+            <span class="record-remark">{{ row.remark || '-' }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -331,13 +346,40 @@ onMounted(fetchRecords)
   font-weight: 500;
 }
 
-:deep(.el-dialog__header) {
+.history-dialog :deep(.el-dialog__header) {
+  background: #f5f7fa;
   margin: 0;
   padding: 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #e4e7ed;
 }
 
-:deep(.el-dialog__body) {
-  padding: 24px;
+.history-dialog :deep(.el-dialog__body) {
+  padding: 20px;
+}
+
+.history-table {
+  width: 100%;
+}
+
+.record-value {
+  font-weight: 500;
+  color: #409eff;
+}
+
+.record-time {
+  color: #666;
+}
+
+.record-remark {
+  color: #999;
+  font-style: italic;
+}
+
+:deep(.el-table td) {
+  padding: 12px 0;
+}
+
+:deep(.el-table--striped .el-table__body tr.el-table__row--striped td) {
+  background: #fafafa;
 }
 </style> 
