@@ -44,24 +44,40 @@ const indicators = [
 // 从后端获取数据
 const fetchRecordData = async () => {
   try {
-    // 直接请求健康记录数据
     const response = await axios.get('/api/health-records')
     if (response.data && Array.isArray(response.data.data)) {
-      // 过滤出当前指标的记录
+      // 添加日期验证函数
+      const isValidDate = (dateStr) => {
+        try {
+          const time = new Date(dateStr)
+          return !isNaN(time.getTime())
+        } catch (error) {
+          return false
+        }
+      }
+
+      // 过滤出当前指标的记录，并验证日期
       const filteredRecords = response.data.data
-        .filter(record => record.type === selectedIndicator.value && record.date) // 确保有date字段
-        .sort((a, b) => new Date(a.date) - new Date(b.date)) // 按日期排序
+        .filter(record => 
+          record.type === selectedIndicator.value && 
+          record.date && 
+          isValidDate(record.date)
+        )
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
       
       // 提取日期和值
       chartData.value = {
-        dates: filteredRecords.map(record => record.date),
+        dates: filteredRecords.map(record => {
+          const date = new Date(record.date)
+          return `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`
+        }),
         values: filteredRecords.map(record => record.value)
       }
       
       updateChart()
     }
   } catch (error) {
-    console.error('Failed to fetch record data:', error)
+    console.error('获取记录数据失败:', error)
   }
 }
 

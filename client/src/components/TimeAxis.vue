@@ -33,10 +33,26 @@ const rangeOptions = [
 
 // 从records.json获取并处理数据
 const processRecords = (records, days) => {
+  // 添加日期格式化函数
+  const formatDate = (dateStr) => {
+    try {
+      const time = new Date(dateStr)
+      if (isNaN(time.getTime())) {
+        return null
+      }
+      return dateStr.replace(/-/g, '/')
+    } catch (error) {
+      console.error('日期格式化错误:', error)
+      return null
+    }
+  }
+
   // 按日期分组数据
   const groupedByDate = {}
   records.forEach(record => {
-    const date = record.date
+    const date = formatDate(record.date)
+    if (!date) return // 跳过无效日期
+    
     if (!groupedByDate[date]) {
       groupedByDate[date] = {}
     }
@@ -49,7 +65,7 @@ const processRecords = (records, days) => {
   // 转换为时间轴数据格式
   return Object.entries(groupedByDate)
     .map(([date, data]) => ({
-      date: date.replace(/-/g, '/'),
+      date,
       data: {
         weight: data.weight || { value: '-', unit: 'kg' },
         calorie: data.calorie || { value: '-', unit: 'kcal' },

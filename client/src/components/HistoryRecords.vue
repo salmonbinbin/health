@@ -14,18 +14,67 @@ const fetchRecords = async () => {
   try {
     const response = await fetch('/api/health-records')
     const data = await response.json()
-    records.value = data.records
-      .filter(record => record.type === props.type)
+    
+    if (!data || !data.data) {
+      console.error('API返回数据格式错误:', data)
+      records.value = []
+      return
+    }
+
+    const recordsData = Array.isArray(data.data) ? data.data : []
+    
+    records.value = recordsData
+      .filter(record => {
+        // 验证记录的完整性
+        if (!record || !record.type || record.type !== props.type) {
+          console.warn('跳过无效记录:', record)
+          return false
+        }
+        
+        // 验证日期
+        try {
+          const time = new Date(record.date || record.createdAt)
+          if (isNaN(time.getTime())) {
+            console.warn('跳过无效日期记录:', record)
+            return false
+          }
+          return true
+        } catch {
+          console.warn('日期解析错误:', record)
+          return false
+        }
+      })
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
       .map(record => ({
-        date: record.date,
+        date: record.date || record.createdAt.split('T')[0],
         value: record.value,
-        unit: record.unit,
-        remark: record.remark
+        unit: record.unit || '',
+        remark: record.remark || ''
       }))
+
+    console.log('处理后的历史记录:', records.value)
   } catch (error) {
-    console.error('Failed to fetch records:', error)
-    records.value = [] // 确保出错时清空数据
+    console.error('获取记录失败:', error)
+    records.value = []
+  }
+}
+
+const formatDate = (dateStr) => {
+  try {
+    const time = new Date(dateStr)
+    if (isNaN(time.getTime())) {
+      return '无效日期'
+    }
+    const year = time.getFullYear()
+    const month = String(time.getMonth() + 1).padStart(2, '0')
+    const day = String(time.getDate()).padStart(2, '0')
+    const hours = String(time.getHours()).padStart(2, '0')
+    const minutes = String(time.getMinutes()).padStart(2, '0')
+    
+    return `${year}/${month}/${day} ${hours}:${minutes}`
+  } catch (error) {
+    console.error('日期格式化错误:', error)
+    return '无效日期'
   }
 }
 
@@ -39,7 +88,7 @@ onMounted(fetchRecords)
     <h2>历史记录</h2>
     <div class="records-list">
       <div v-for="record in records" :key="record.date" class="record-item">
-        <div class="record-date">{{ record.date }}</div>
+        <div class="record-date">{{ formatDate(record.date) }}</div>
         <div class="record-value">{{ record.value }}{{ record.unit }}</div>
         <div class="record-remark">{{ record.remark }}</div>
       </div>
