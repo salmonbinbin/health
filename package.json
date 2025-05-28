@@ -1,0 +1,23 @@
+{
+  "name": "health-system",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "client:dev": "cd client && npm run dev",
+    "client:build": "cd client && npm run build",
+    "server:dev": "cd server && npm run dev",
+    "server:start": "cd server && npm start",
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "build": "npm run client:build",
+    "start": "npm run server:start",
+    "db:setup": "mysql -u root -p < setup_database.sql",
+    "db:import": "cd server && node scripts/import-data-es.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "mysql2": "^3.6.5",
+    "dotenv": "^16.3.1"
+  }
+}

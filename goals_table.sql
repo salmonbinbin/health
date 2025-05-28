@@ -1,0 +1,11 @@
+CREATE TABLE `goals` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `type` VARCHAR(50) NOT NULL COMMENT '目标类型',
+  `value` VARCHAR(50) NOT NULL COMMENT '目标值范围',
+  `unit` VARCHAR(10) NOT NULL COMMENT '单位',
+  `user_id` INT COMMENT '用户ID',
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX `idx_type` (`type`),
+  INDEX `idx_user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; 
