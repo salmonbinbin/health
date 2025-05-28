@@ -74,13 +74,14 @@ try {
   console.error('初始化数据库连接失败，将使用文件存储:', error.message)
 }
 
-// 读取记录
-const readRecords = () => {
+// 读取记录数据
+function readRecords() {
   try {
-    const data = fs.readFileSync(RECORDS_FILE, 'utf8')
-    return JSON.parse(data).records
+    const data = fs.readFileSync(path.join(__dirname, 'data/records.json'), 'utf8')
+    const recordsData = JSON.parse(data)
+    return recordsData.records || []
   } catch (error) {
-    console.error('读取记录失败:', error)
+    console.error('读取记录数据失败:', error)
     return []
   }
 }
@@ -287,7 +288,10 @@ app.get('/api/health-records', async (req, res) => {
       const [rows] = await pool.query(query, params)
       res.json({ data: rows })
     } else {
-      const records = readRecords()
+      const recordsData = readRecords()
+      // 确保返回的是数组格式
+      const records = Array.isArray(recordsData) ? recordsData : 
+                     (recordsData.records || [])
       res.json({ data: records })
     }
   } catch (error) {
