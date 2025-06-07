@@ -31,9 +31,12 @@
           placeholder="请确认密码" 
           class="input-field"
         >
+        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
         <div class="button-group">
-          <button @click="handleRegister" class="register-button">注册</button>
-          <button @click="goToLogin" class="back-button">返回登录</button>
+          <button @click="handleRegister" class="register-button" :disabled="loading">
+            {{ loading ? '注册中...' : '注册' }}
+          </button>
+          <button @click="goToLogin" class="back-button" :disabled="loading">返回登录</button>
         </div>
       </div>
     </div>
@@ -42,6 +45,8 @@
 
 <script>
 import defaultAvatarImg from '@/assets/1.jpg'
+import { authApi } from '@/utils/api'
+import { ElMessage } from 'element-plus'
 
 export default {
   name: 'RegisterView',
@@ -51,6 +56,8 @@ export default {
       password: '',
       confirmPassword: '',
       avatarPreview: '',
+      loading: false,
+      errorMessage: '',
       defaultAvatar: defaultAvatarImg
     }
   },
@@ -68,22 +75,56 @@ export default {
         reader.readAsDataURL(file)
       }
     },
-    handleRegister() {
+    async handleRegister() {
+      // 清除之前的错误信息
+      this.errorMessage = '';
+      
+      // 验证表单
       if (!this.username || !this.password) {
-        alert('请填写完整信息')
-        return
+        this.errorMessage = '请填写完整信息';
+        return;
       }
       if (this.password !== this.confirmPassword) {
-        alert('两次输入的密码不一致')
-        return
+        this.errorMessage = '两次输入的密码不一致';
+        return;
       }
       
-      // 保存用户信息到本地存储
-      localStorage.setItem('lastUsername', this.username)
-      localStorage.setItem('lastUserAvatar', this.avatarPreview)
+      this.loading = true;
+      
+      try {
+        // 调用注册API
+        const response = await authApi.register({
+          username: this.username,
+          password: this.password
+        });
+        
+        // 如果API调用成功
+        if (response.success) {
+          // 保存JWT和用户信息
+          authApi.setAuthInfo({
+            token: response.token,
+            user: response.user
+          });
+          
+          // 保存用户头像到本地存储（保持向后兼容性）
+          if (this.avatarPreview) {
+            localStorage.setItem('lastUserAvatar', this.avatarPreview);
+          }
+          
+          // 显示成功消息
+          ElMessage.success('注册成功！请登录');
       
       // 注册成功，跳转到登录页
-      this.$router.push('/login')
+          this.$router.push('/login');
+        } else {
+          this.errorMessage = response.message || '注册失败，请稍后重试';
+        }
+      } catch (error) {
+        console.error('注册错误:', error);
+        this.errorMessage = error.response?.data?.message || '注册失败，请检查网络连接';
+      } finally {
+        this.loading = false;
+      }
     },
     goToLogin() {
       this.$router.push('/login')
@@ -159,6 +200,12 @@ export default {
   border-color: #409EFF;
 }
 
+.error-message {
+  color: #F56C6C;
+  font-size: 14px;
+  margin-top: -10px;
+}
+
 .button-group {
   display: flex;
   gap: 15px;
@@ -180,8 +227,14 @@ export default {
   color: white;
 }
 
-.register-button:hover {
+.register-button:hover:not(:disabled) {
   background-color: #85ce61;
+}
+
+.register-button:disabled,
+.back-button:disabled {
+  background-color: #c2e7b0;
+  cursor: not-allowed;
 }
 
 .back-button {
@@ -189,7 +242,7 @@ export default {
   color: white;
 }
 
-.back-button:hover {
+.back-button:hover:not(:disabled) {
   background-color: #a6a9ad;
 }
 </style> 

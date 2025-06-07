@@ -7,6 +7,9 @@ import { fileURLToPath } from 'url'
 import { chatWithSparkAPI } from './utils/sparkApi.js'
 import dotenv from 'dotenv'
 import { createPool } from 'mysql2/promise'
+import authRouter from './routes/auth.js'
+import adminRouter from './routes/admin.js'
+import { authenticateJWT } from './middleware/auth.js'
 
 // 加载环境变量
 dotenv.config()
@@ -33,6 +36,15 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
+
+// 认证路由
+app.use('/api/auth', authRouter)
+
+// 管理员路由
+app.use('/api/admin', adminRouter)
+
+// 添加JWT认证中间件（非强制性，保持向后兼容）
+app.use(authenticateJWT)
 
 // 数据库连接配置
 let pool = null
@@ -271,10 +283,12 @@ app.get('/api/test', (req, res) => {
 // 获取健康记录
 app.get('/api/health-records', async (req, res) => {
   try {
+    // 从认证中间件获取用户ID，如果未认证则使用请求参数或默认值
+    // 这样可以保持向后兼容性
+    const userId = req.user?.isAuthenticated ? req.user.userId : (req.query.userId || 1)
+    const type = req.query.type
+    
     if (useDatabase && pool) {
-      const userId = req.query.userId || 1
-      const type = req.query.type
-      
       let query = 'SELECT * FROM health_records WHERE user_id = ?'
       let params = [userId]
       
@@ -292,7 +306,13 @@ app.get('/api/health-records', async (req, res) => {
       // 确保返回的是数组格式
       const records = Array.isArray(recordsData) ? recordsData : 
                      (recordsData.records || [])
-      res.json({ data: records })
+      
+      // 如果用户已认证，过滤出该用户的记录
+      const filteredRecords = req.user?.isAuthenticated 
+        ? records.filter(record => record.userId == userId || record.user_id == userId)
+        : records
+        
+      res.json({ data: filteredRecords })
     }
   } catch (error) {
     console.error('获取健康记录失败:', error)
@@ -303,9 +323,13 @@ app.get('/api/health-records', async (req, res) => {
 // 添加健康记录
 app.post('/api/health-records', async (req, res) => {
   try {
+    // 从认证中间件获取用户ID，如果未认证则使用请求参数或默认值
+    const userId = req.user?.isAuthenticated ? req.user.userId : (req.body.userId || 1)
+    
     const newRecord = {
       id: Date.now().toString(),
       ...req.body,
+      userId: userId, // 确保记录中包含用户ID
       createdAt: new Date().toISOString()
     }
     
@@ -331,7 +355,7 @@ app.post('/api/health-records', async (req, res) => {
         newRecord.unit,
         newRecord.remark,
         formattedDate,
-        req.body.userId || 1
+        userId
       ])
       
       res.json({ success: true, data: newRecord })

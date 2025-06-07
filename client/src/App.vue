@@ -1,7 +1,19 @@
 <script setup>
 import SideNav from './components/SideNav.vue'
+import { ref, shallowRef } from 'vue'
 
-const isDev = process.env.NODE_ENV === 'development'
+const isDev = import.meta.env.DEV
+const StagewiseToolbar = shallowRef(null)
+const stagewiseConfig = ref({
+  plugins: []
+})
+
+// 仅在开发环境中动态导入stagewise工具栏
+if (isDev) {
+  import('@stagewise/toolbar-vue').then(module => {
+    StagewiseToolbar.value = module.StagewiseToolbar
+  })
+}
 </script>
 
 <template>
@@ -14,6 +26,7 @@ const isDev = process.env.NODE_ENV === 'development'
         </transition>
       </router-view>
     </div>
+    <component :is="StagewiseToolbar" v-if="isDev && StagewiseToolbar" :config="stagewiseConfig" />
   </div>
 </template>
 

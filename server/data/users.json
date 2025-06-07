@@ -1,0 +1,41 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "$2b$10$lJnRt8trmq6xN/9/AUN8MekMEW7TmTlUQmU1QH8g2XfpIwzn9voQG",
+      "isAdmin": true,
+      "createdAt": "2023-05-26T02:16:31.000Z"
+    },
+    {
+      "id": "4",
+      "username": "yxw",
+      "password": "$2b$10$lJnRt8trmq6xN/9/AUN8MekMEW7TmTlUQmU1QH8g2XfpIwzn9voQG",
+      "createdAt": "2025-06-07T14:36:58.000Z"
+    },
+    {
+      "id": "5",
+      "username": "yxw1234",
+      "password": "$2b$10$lJnRt8trmq6xN/9/AUN8MekMEW7TmTlUQmU1QH8g2XfpIwzn9voQG",
+      "createdAt": "2025-06-07T14:39:11.000Z",
+      "isDisabled": true,
+      "disabledReason": null
+    },
+    {
+      "id": "6",
+      "username": "salmon",
+      "password": "$2b$10$lJnRt8trmq6xN/9/AUN8MekMEW7TmTlUQmU1QH8g2XfpIwzn9voQG",
+      "createdAt": "2025-06-07T14:49:16.000Z",
+      "isDisabled": true,
+      "disabledReason": null
+    },
+    {
+      "id": "7",
+      "username": "黄晓明",
+      "password": "$2b$10$lJnRt8trmq6xN/9/AUN8MekMEW7TmTlUQmU1QH8g2XfpIwzn9voQG",
+      "createdAt": "2025-06-07T21:54:08.000Z",
+      "isDisabled": true,
+      "disabledReason": null
+    }
+  ]
+}
