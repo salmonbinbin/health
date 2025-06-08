@@ -1,0 +1,284 @@
+{
+  "records": [
+    {
+      "id": "pt001",
+      "semester": "大一（上）",
+      "type": "bmi",
+      "value": 21.5,
+      "unit": "",
+      "grade": "良好",
+      "remark": "体重正常",
+      "createdAt": "2022-10-15T08:30:00.000Z"
+    },
+    {
+      "id": "pt002",
+      "semester": "大一（上）",
+      "type": "vital-capacity",
+      "value": 3500,
+      "unit": "ml",
+      "grade": "良好",
+      "remark": "肺活量良好",
+      "createdAt": "2022-10-15T08:45:00.000Z"
+    },
+    {
+      "id": "pt003",
+      "semester": "大一（上）",
+      "type": "sit-and-reach",
+      "value": 12.5,
+      "unit": "cm",
+      "grade": "及格",
+      "remark": "柔韧性待提高",
+      "createdAt": "2022-10-15T09:00:00.000Z"
+    },
+    {
+      "id": "pt004",
+      "semester": "大一（上）",
+      "type": "standing-long-jump",
+      "value": 230,
+      "unit": "cm",
+      "grade": "及格",
+      "remark": "爆发力一般",
+      "createdAt": "2022-10-15T09:15:00.000Z"
+    },
+    {
+      "id": "pt005",
+      "semester": "大一（上）",
+      "type": "pull-ups",
+      "value": 8,
+      "unit": "次",
+      "grade": "及格",
+      "remark": "上肢力量一般",
+      "createdAt": "2022-10-15T09:30:00.000Z"
+    },
+    {
+      "id": "pt006",
+      "semester": "大一（上）",
+      "type": "fifty-meters",
+      "value": 7.8,
+      "unit": "秒",
+      "grade": "及格",
+      "remark": "爆发速度一般",
+      "createdAt": "2022-10-15T09:45:00.000Z"
+    },
+    {
+      "id": "pt007",
+      "semester": "大一（上）",
+      "type": "thousand-meters",
+      "value": 250,
+      "unit": "秒",
+      "grade": "及格",
+      "remark": "耐力一般",
+      "createdAt": "2022-10-15T10:00:00.000Z"
+    },
+    {
+      "id": "pt008",
+      "semester": "大一（下）",
+      "type": "bmi",
+      "value": 21.2,
+      "unit": "",
+      "grade": "良好",
+      "remark": "体重改善",
+      "createdAt": "2023-04-20T09:00:00.000Z"
+    },
+    {
+      "id": "pt009",
+      "semester": "大一（下）",
+      "type": "vital-capacity",
+      "value": 3650,
+      "unit": "ml",
+      "grade": "良好",
+      "remark": "有所提高",
+      "createdAt": "2023-04-20T09:15:00.000Z"
+    },
+    {
+      "id": "pt010",
+      "semester": "大一（下）",
+      "type": "sit-and-reach",
+      "value": 13.8,
+      "unit": "cm",
+      "grade": "良好",
+      "remark": "柔韧性提高",
+      "createdAt": "2023-04-20T09:30:00.000Z"
+    },
+    {
+      "id": "pt011",
+      "semester": "大一（下）",
+      "type": "standing-long-jump",
+      "value": 240,
+      "unit": "cm",
+      "grade": "良好",
+      "remark": "爆发力提高",
+      "createdAt": "2023-04-20T09:45:00.000Z"
+    },
+    {
+      "id": "pt012",
+      "semester": "大一（下）",
+      "type": "pull-ups",
+      "value": 10,
+      "unit": "次",
+      "grade": "良好",
+      "remark": "上肢力量提高",
+      "createdAt": "2023-04-20T10:00:00.000Z"
+    },
+    {
+      "id": "pt013",
+      "semester": "大一（下）",
+      "type": "fifty-meters",
+      "value": 7.5,
+      "unit": "秒",
+      "grade": "良好",
+      "remark": "速度提高",
+      "createdAt": "2023-04-20T10:15:00.000Z"
+    },
+    {
+      "id": "pt014",
+      "semester": "大一（下）",
+      "type": "thousand-meters",
+      "value": 240,
+      "unit": "秒",
+      "grade": "良好",
+      "remark": "耐力提高",
+      "createdAt": "2023-04-20T10:30:00.000Z"
+    },
+    {
+      "id": "pt015",
+      "semester": "大二（上）",
+      "type": "bmi",
+      "value": 20.8,
+      "unit": "",
+      "grade": "优秀",
+      "remark": "体重进一步改善",
+      "createdAt": "2023-10-18T10:15:00.000Z"
+    },
+    {
+      "id": "pt016",
+      "semester": "大二（上）",
+      "type": "vital-capacity",
+      "value": 3800,
+      "unit": "ml",
+      "grade": "优秀",
+      "remark": "肺活量提高",
+      "createdAt": "2023-10-18T10:30:00.000Z"
+    },
+    {
+      "id": "pt017",
+      "semester": "大二（上）",
+      "type": "sit-and-reach",
+      "value": 14.5,
+      "unit": "cm",
+      "grade": "良好",
+      "remark": "柔韧性持续提高",
+      "createdAt": "2023-10-18T10:45:00.000Z"
+    },
+    {
+      "id": "pt018",
+      "semester": "大二（上）",
+      "type": "standing-long-jump",
+      "value": 245,
+      "unit": "cm",
+      "grade": "良好",
+      "remark": "爆发力稳定提高",
+      "createdAt": "2023-10-18T11:00:00.000Z"
+    },
+    {
+      "id": "pt019",
+      "semester": "大二（上）",
+      "type": "pull-ups",
+      "value": 12,
+      "unit": "次",
+      "grade": "良好",
+      "remark": "上肢力量持续提高",
+      "createdAt": "2023-10-18T11:15:00.000Z"
+    },
+    {
+      "id": "pt020",
+      "semester": "大二（上）",
+      "type": "fifty-meters",
+      "value": 7.2,
+      "unit": "秒",
+      "grade": "良好",
+      "remark": "速度持续提高",
+      "createdAt": "2023-10-18T11:30:00.000Z"
+    },
+    {
+      "id": "pt021",
+      "semester": "大二（上）",
+      "type": "thousand-meters",
+      "value": 235,
+      "unit": "秒",
+      "grade": "良好",
+      "remark": "耐力持续提高",
+      "createdAt": "2023-10-18T11:45:00.000Z"
+    },
+    {
+      "id": "pt022",
+      "semester": "大二（下）",
+      "type": "bmi",
+      "value": 20.5,
+      "unit": "",
+      "grade": "优秀",
+      "remark": "体重健康稳定",
+      "createdAt": "2024-04-15T11:00:00.000Z"
+    },
+    {
+      "id": "pt023",
+      "semester": "大二（下）",
+      "type": "vital-capacity",
+      "value": 3950,
+      "unit": "ml",
+      "grade": "优秀",
+      "remark": "肺活量优秀",
+      "createdAt": "2024-04-15T11:15:00.000Z"
+    },
+    {
+      "id": "pt024",
+      "semester": "大二（下）",
+      "type": "sit-and-reach",
+      "value": 15.2,
+      "unit": "cm",
+      "grade": "优秀",
+      "remark": "柔韧性优秀",
+      "createdAt": "2024-04-15T11:30:00.000Z"
+    },
+    {
+      "id": "pt025",
+      "semester": "大二（下）",
+      "type": "standing-long-jump",
+      "value": 255,
+      "unit": "cm",
+      "grade": "优秀",
+      "remark": "爆发力优秀",
+      "createdAt": "2024-04-15T11:45:00.000Z"
+    },
+    {
+      "id": "pt026",
+      "semester": "大二（下）",
+      "type": "pull-ups",
+      "value": 15,
+      "unit": "次",
+      "grade": "优秀",
+      "remark": "上肢力量优秀",
+      "createdAt": "2024-04-15T12:00:00.000Z"
+    },
+    {
+      "id": "pt027",
+      "semester": "大二（下）",
+      "type": "fifty-meters",
+      "value": 6.9,
+      "unit": "秒",
+      "grade": "优秀",
+      "remark": "速度优秀",
+      "createdAt": "2024-04-15T12:15:00.000Z"
+    },
+    {
+      "id": "pt028",
+      "semester": "大二（下）",
+      "type": "thousand-meters",
+      "value": 225,
+      "unit": "秒",
+      "grade": "优秀",
+      "remark": "耐力优秀",
+      "createdAt": "2024-04-15T12:30:00.000Z"
+    }
+  ]
+}

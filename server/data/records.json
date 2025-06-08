@@ -1,0 +1,445 @@
+{
+  "records": [
+    {
+      "id": "1748110000001",
+      "date": "2025-05-01",
+      "type": "heart-rate",
+      "value": 72,
+      "unit": "BPM",
+      "remark": "晨起测量",
+      "createdAt": "2025-05-01T07:30:00.000Z"
+    },
+    {
+      "id": "1748110000002",
+      "date": "2025-05-02",
+      "type": "heart-rate",
+      "value": 74,
+      "unit": "BPM",
+      "remark": "晨起测量",
+      "createdAt": "2025-05-02T07:30:00.000Z"
+    },
+    {
+      "id": "1748110000003",
+      "date": "2025-05-03",
+      "type": "heart-rate",
+      "value": 71,
+      "unit": "BPM",
+      "remark": "晨起测量",
+      "createdAt": "2025-05-03T07:30:00.000Z"
+    },
+    {
+      "id": "1748110000004",
+      "date": "2025-05-04",
+      "type": "heart-rate",
+      "value": 73,
+      "unit": "BPM",
+      "remark": "晨起测量",
+      "createdAt": "2025-05-04T07:30:00.000Z"
+    },
+    {
+      "id": "1748110000005",
+      "date": "2025-05-05",
+      "type": "heart-rate",
+      "value": 75,
+      "unit": "BPM",
+      "remark": "晨起测量",
+      "createdAt": "2025-05-05T07:30:00.000Z"
+    },
+    {
+      "id": "1748110000006",
+      "date": "2025-05-06",
+      "type": "heart-rate",
+      "value": 72,
+      "unit": "BPM",
+      "remark": "晨起测量",
+      "createdAt": "2025-05-06T07:30:00.000Z"
+    },
+    {
+      "id": "1748110000007",
+      "date": "2025-05-07",
+      "type": "heart-rate",
+      "value": 73,
+      "unit": "BPM",
+      "remark": "晨起测量",
+      "createdAt": "2025-05-07T07:30:00.000Z"
+    },
+    {
+      "id": "1748110000008",
+      "date": "2025-05-01",
+      "type": "weight",
+      "value": 65.2,
+      "unit": "kg",
+      "remark": "早晨空腹",
+      "createdAt": "2025-05-01T06:30:00.000Z"
+    },
+    {
+      "id": "1748110000009",
+      "date": "2025-05-02",
+      "type": "weight",
+      "value": 65.3,
+      "unit": "kg",
+      "remark": "早晨空腹",
+      "createdAt": "2025-05-02T06:30:00.000Z"
+    },
+    {
+      "id": "1748110000010",
+      "date": "2025-05-03",
+      "type": "weight",
+      "value": 65.1,
+      "unit": "kg",
+      "remark": "早晨空腹",
+      "createdAt": "2025-05-03T06:30:00.000Z"
+    },
+    {
+      "id": "1748110000011",
+      "date": "2025-05-04",
+      "type": "weight",
+      "value": 65.2,
+      "unit": "kg",
+      "remark": "早晨空腹",
+      "createdAt": "2025-05-04T06:30:00.000Z"
+    },
+    {
+      "id": "1748110000012",
+      "date": "2025-05-05",
+      "type": "weight",
+      "value": 65,
+      "unit": "kg",
+      "remark": "早晨空腹",
+      "createdAt": "2025-05-05T06:30:00.000Z"
+    },
+    {
+      "id": "1748110000013",
+      "date": "2025-05-06",
+      "type": "weight",
+      "value": 65.1,
+      "unit": "kg",
+      "remark": "早晨空腹",
+      "createdAt": "2025-05-06T06:30:00.000Z"
+    },
+    {
+      "id": "1748110000014",
+      "date": "2025-05-07",
+      "type": "weight",
+      "value": 65.2,
+      "unit": "kg",
+      "remark": "早晨空腹",
+      "createdAt": "2025-05-07T06:30:00.000Z"
+    },
+    {
+      "id": "1748110000015",
+      "date": "2025-05-01",
+      "type": "bmi",
+      "value": 21.8,
+      "unit": "",
+      "remark": "正常范围",
+      "createdAt": "2025-05-01T06:35:00.000Z"
+    },
+    {
+      "id": "1748110000016",
+      "date": "2025-05-02",
+      "type": "bmi",
+      "value": 21.9,
+      "unit": "",
+      "remark": "正常范围",
+      "createdAt": "2025-05-02T06:35:00.000Z"
+    },
+    {
+      "id": "1748110000017",
+      "date": "2025-05-03",
+      "type": "bmi",
+      "value": 21.7,
+      "unit": "",
+      "remark": "正常范围",
+      "createdAt": "2025-05-03T06:35:00.000Z"
+    },
+    {
+      "id": "1748110000018",
+      "date": "2025-05-04",
+      "type": "bmi",
+      "value": 21.8,
+      "unit": "",
+      "remark": "正常范围",
+      "createdAt": "2025-05-04T06:35:00.000Z"
+    },
+    {
+      "id": "1748110000019",
+      "date": "2025-05-05",
+      "type": "bmi",
+      "value": 21.7,
+      "unit": "",
+      "remark": "正常范围",
+      "createdAt": "2025-05-05T06:35:00.000Z"
+    },
+    {
+      "id": "1748110000020",
+      "date": "2025-05-06",
+      "type": "bmi",
+      "value": 21.7,
+      "unit": "",
+      "remark": "正常范围",
+      "createdAt": "2025-05-06T06:35:00.000Z"
+    },
+    {
+      "id": "1748110000021",
+      "date": "2025-05-07",
+      "type": "bmi",
+      "value": 21.8,
+      "unit": "",
+      "remark": "正常范围",
+      "createdAt": "2025-05-07T06:35:00.000Z"
+    },
+    {
+      "id": "1748110000022",
+      "date": "2025-05-01",
+      "type": "body-fat",
+      "value": 18.5,
+      "unit": "%",
+      "remark": "体脂秤测量",
+      "createdAt": "2025-05-01T06:40:00.000Z"
+    },
+    {
+      "id": "1748110000023",
+      "date": "2025-05-02",
+      "type": "body-fat",
+      "value": 18.6,
+      "unit": "%",
+      "remark": "体脂秤测量",
+      "createdAt": "2025-05-02T06:40:00.000Z"
+    },
+    {
+      "id": "1748110000024",
+      "date": "2025-05-03",
+      "type": "body-fat",
+      "value": 18.4,
+      "unit": "%",
+      "remark": "体脂秤测量",
+      "createdAt": "2025-05-03T06:40:00.000Z"
+    },
+    {
+      "id": "1748110000025",
+      "date": "2025-05-04",
+      "type": "body-fat",
+      "value": 18.5,
+      "unit": "%",
+      "remark": "体脂秤测量",
+      "createdAt": "2025-05-04T06:40:00.000Z"
+    },
+    {
+      "id": "1748110000026",
+      "date": "2025-05-05",
+      "type": "body-fat",
+      "value": 18.3,
+      "unit": "%",
+      "remark": "体脂秤测量",
+      "createdAt": "2025-05-05T06:40:00.000Z"
+    },
+    {
+      "id": "1748110000027",
+      "date": "2025-05-06",
+      "type": "body-fat",
+      "value": 18.4,
+      "unit": "%",
+      "remark": "体脂秤测量",
+      "createdAt": "2025-05-06T06:40:00.000Z"
+    },
+    {
+      "id": "1748110000028",
+      "date": "2025-05-07",
+      "type": "body-fat",
+      "value": 18.5,
+      "unit": "%",
+      "remark": "体脂秤测量",
+      "createdAt": "2025-05-07T06:40:00.000Z"
+    },
+    {
+      "id": "1748110000029",
+      "date": "2025-05-01",
+      "type": "calorie",
+      "value": 2100,
+      "unit": "kcal",
+      "remark": "日常消耗",
+      "createdAt": "2025-05-01T21:00:00.000Z"
+    },
+    {
+      "id": "1748110000030",
+      "date": "2025-05-02",
+      "type": "calorie",
+      "value": 2300,
+      "unit": "kcal",
+      "remark": "运动日",
+      "createdAt": "2025-05-02T21:00:00.000Z"
+    },
+    {
+      "id": "1748110000031",
+      "date": "2025-05-03",
+      "type": "calorie",
+      "value": 2000,
+      "unit": "kcal",
+      "remark": "休息日",
+      "createdAt": "2025-05-03T21:00:00.000Z"
+    },
+    {
+      "id": "1748110000032",
+      "date": "2025-05-04",
+      "type": "calorie",
+      "value": 2200,
+      "unit": "kcal",
+      "remark": "运动日",
+      "createdAt": "2025-05-04T21:00:00.000Z"
+    },
+    {
+      "id": "1748110000033",
+      "date": "2025-05-05",
+      "type": "calorie",
+      "value": 2150,
+      "unit": "kcal",
+      "remark": "日常消耗",
+      "createdAt": "2025-05-05T21:00:00.000Z"
+    },
+    {
+      "id": "1748110000034",
+      "date": "2025-05-06",
+      "type": "calorie",
+      "value": 2250,
+      "unit": "kcal",
+      "remark": "运动日",
+      "createdAt": "2025-05-06T21:00:00.000Z"
+    },
+    {
+      "id": "1748110000035",
+      "date": "2025-05-07",
+      "type": "calorie",
+      "value": 2100,
+      "unit": "kcal",
+      "remark": "日常消耗",
+      "createdAt": "2025-05-07T21:00:00.000Z"
+    },
+    {
+      "id": "1748110000036",
+      "date": "2025-05-01",
+      "type": "sleep",
+      "value": 7.5,
+      "unit": "h",
+      "remark": "睡眠良好",
+      "createdAt": "2025-05-01T07:00:00.000Z"
+    },
+    {
+      "id": "1748110000037",
+      "date": "2025-05-02",
+      "type": "sleep",
+      "value": 7.2,
+      "unit": "h",
+      "remark": "睡眠一般",
+      "createdAt": "2025-05-02T07:00:00.000Z"
+    },
+    {
+      "id": "1748110000038",
+      "date": "2025-05-03",
+      "type": "sleep",
+      "value": 8,
+      "unit": "h",
+      "remark": "周末充足睡眠",
+      "createdAt": "2025-05-03T07:00:00.000Z"
+    },
+    {
+      "id": "1748110000039",
+      "date": "2025-05-04",
+      "type": "sleep",
+      "value": 7.8,
+      "unit": "h",
+      "remark": "周末充足睡眠",
+      "createdAt": "2025-05-04T07:00:00.000Z"
+    },
+    {
+      "id": "1748110000040",
+      "date": "2025-05-05",
+      "type": "sleep",
+      "value": 7.3,
+      "unit": "h",
+      "remark": "睡眠一般",
+      "createdAt": "2025-05-05T07:00:00.000Z"
+    },
+    {
+      "id": "1748110000041",
+      "date": "2025-05-06",
+      "type": "sleep",
+      "value": 7.4,
+      "unit": "h",
+      "remark": "睡眠一般",
+      "createdAt": "2025-05-06T07:00:00.000Z"
+    },
+    {
+      "id": "1748110000042",
+      "date": "2025-05-07",
+      "type": "sleep",
+      "value": 7.5,
+      "unit": "h",
+      "remark": "睡眠良好",
+      "createdAt": "2025-05-07T07:00:00.000Z"
+    },
+    {
+      "id": "1748110000043",
+      "date": "2025-05-02",
+      "type": "running",
+      "value": 5,
+      "unit": "km",
+      "remark": "晨跑",
+      "createdAt": "2025-05-02T06:30:00.000Z"
+    },
+    {
+      "id": "1748110000044",
+      "date": "2025-05-04",
+      "type": "running",
+      "value": 5.5,
+      "unit": "km",
+      "remark": "晨跑",
+      "createdAt": "2025-05-04T06:30:00.000Z"
+    },
+    {
+      "id": "1748110000045",
+      "date": "2025-05-06",
+      "type": "running",
+      "value": 5.2,
+      "unit": "km",
+      "remark": "晨跑",
+      "createdAt": "2025-05-06T06:30:00.000Z"
+    },
+    {
+      "id": "1748110000046",
+      "date": "2025-05-02",
+      "type": "exercise-heart-rate",
+      "value": 145,
+      "unit": "BPM",
+      "remark": "跑步中测量",
+      "createdAt": "2025-05-02T06:45:00.000Z"
+    },
+    {
+      "id": "1748110000047",
+      "date": "2025-05-04",
+      "type": "exercise-heart-rate",
+      "value": 148,
+      "unit": "BPM",
+      "remark": "跑步中测量",
+      "createdAt": "2025-05-04T06:45:00.000Z"
+    },
+    {
+      "id": "1748110000048",
+      "date": "2025-05-06",
+      "type": "exercise-heart-rate",
+      "value": 146,
+      "unit": "BPM",
+      "remark": "跑步中测量",
+      "createdAt": "2025-05-06T06:45:00.000Z"
+    },
+    {
+      "id": "1748189355297",
+      "type": "heart-rate",
+      "value": 144,
+      "unit": "BPM",
+      "remark": null,
+      "date": "2025-05-25",
+      "createdAt": "2025-05-25T16:09:15.297Z"
+    }
+  ]
+}

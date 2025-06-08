@@ -1,0 +1,42 @@
+[
+  {
+    "type": "heart-rate",
+    "value": "60-100",
+    "unit": "BPM"
+  },
+  {
+    "type": "weight",
+    "value": "60-70",
+    "unit": "kg"
+  },
+  {
+    "type": "bmi",
+    "value": "18.5-24.9",
+    "unit": ""
+  },
+  {
+    "type": "body-fat",
+    "value": "15-25",
+    "unit": "%"
+  },
+  {
+    "type": "calorie",
+    "value": "2000-2500",
+    "unit": "kcal"
+  },
+  {
+    "type": "sleep",
+    "value": "7-9",
+    "unit": "h"
+  },
+  {
+    "type": "running",
+    "value": "5",
+    "unit": "km"
+  },
+  {
+    "type": "exercise-heart-rate",
+    "value": "120-150",
+    "unit": "BPM"
+  }
+]
