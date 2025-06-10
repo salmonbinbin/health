@@ -91,7 +91,16 @@ function readRecords() {
   try {
     const data = fs.readFileSync(path.join(__dirname, 'data/records.json'), 'utf8')
     const recordsData = JSON.parse(data)
-    return recordsData.records || []
+    
+    // 检查数据格式，确保兼容性
+    if (Array.isArray(recordsData)) {
+      return recordsData
+    } else if (recordsData.records && Array.isArray(recordsData.records)) {
+      return recordsData.records
+    } else {
+      console.warn('记录数据格式不符合预期，返回空数组')
+      return []
+    }
   } catch (error) {
     console.error('读取记录数据失败:', error)
     return []
@@ -101,7 +110,29 @@ function readRecords() {
 // 写入记录
 const writeRecords = (records) => {
   try {
-    fs.writeFileSync(RECORDS_FILE, JSON.stringify({ records }, null, 2))
+    console.log(`准备写入记录文件，记录数: ${records.length}`);
+    
+    // 确保记录数据是对象格式
+    let dataToWrite;
+    if (Array.isArray(records)) {
+      dataToWrite = { records };
+    } else {
+      dataToWrite = records;
+    }
+    
+    fs.writeFileSync(RECORDS_FILE, JSON.stringify(dataToWrite, null, 2))
+    console.log('记录文件写入成功')
+    
+    // 验证写入是否成功
+    try {
+      const readBack = JSON.parse(fs.readFileSync(RECORDS_FILE, 'utf8'))
+      const recordsCount = Array.isArray(readBack) ? readBack.length : 
+                          (readBack.records ? readBack.records.length : 0)
+      console.log(`记录文件验证成功，包含${recordsCount}条记录`)
+    } catch (verifyError) {
+      console.error('记录文件验证失败:', verifyError)
+    }
+    
     return true
   } catch (error) {
     console.error('写入记录失败:', error)
@@ -280,7 +311,7 @@ app.get('/api/test', (req, res) => {
   })
 })
 
-// 获取健康记录
+// 获取所有健康记录
 app.get('/api/health-records', async (req, res) => {
   try {
     // 从认证中间件获取用户ID，如果未认证则使用请求参数或默认值
@@ -307,22 +338,29 @@ app.get('/api/health-records', async (req, res) => {
       const records = Array.isArray(recordsData) ? recordsData : 
                      (recordsData.records || [])
       
-      // 如果用户已认证，过滤出该用户的记录
-      const filteredRecords = req.user?.isAuthenticated 
-        ? records.filter(record => record.userId == userId || record.user_id == userId)
-        : records
+      // 在文件存储模式下，不进行用户过滤，直接返回所有记录
+      // 这样可以确保示例数据能够正常显示
+      let filteredRecords = records
+      
+      // 如果指定了类型，则按类型过滤
+      if (type) {
+        filteredRecords = filteredRecords.filter(record => record.type === type)
+      }
         
+      // 统一返回格式为 { data: [...] }
       res.json({ data: filteredRecords })
     }
   } catch (error) {
     console.error('获取健康记录失败:', error)
     res.status(500).json({ error: '获取健康记录失败' })
   }
-})
+});
 
 // 添加健康记录
 app.post('/api/health-records', async (req, res) => {
   try {
+    console.log('接收到添加记录请求:', req.body);
+    
     // 从认证中间件获取用户ID，如果未认证则使用请求参数或默认值
     const userId = req.user?.isAuthenticated ? req.user.userId : (req.body.userId || 1)
     
@@ -330,8 +368,15 @@ app.post('/api/health-records', async (req, res) => {
       id: Date.now().toString(),
       ...req.body,
       userId: userId, // 确保记录中包含用户ID
-      createdAt: new Date().toISOString()
+      createdAt: req.body.createdAt || new Date().toISOString()
     }
+    
+    // 确保记录有日期字段
+    if (!newRecord.date) {
+      newRecord.date = new Date().toISOString().split('T')[0]
+    }
+    
+    console.log('处理后的新健康记录:', JSON.stringify(newRecord))
     
     if (useDatabase && pool) {
       // 使用数据库存储
@@ -347,32 +392,63 @@ app.post('/api/health-records', async (req, res) => {
         .slice(0, 19)
         .replace('T', ' ')
       
-      await pool.execute(sql, [
+      // 确保所有参数都不是undefined
+      const params = [
         newRecord.id,
-        newRecord.date,
+        newRecord.date || new Date().toISOString().split('T')[0],
         newRecord.type,
-        newRecord.value,
-        newRecord.unit,
-        newRecord.remark,
+        newRecord.value, 
+        newRecord.unit || '', // 确保unit不是undefined
+        newRecord.remark === undefined ? null : newRecord.remark, // undefined转为null
         formattedDate,
         userId
-      ])
+      ]
       
+      console.log('SQL参数:', params);
+      
+      // 检查所有参数，确保不包含undefined
+      const validParams = params.map(param => param === undefined ? null : param)
+      
+      await pool.execute(sql, validParams)
+      
+      // 确认数据已添加成功
+      console.log('记录已成功添加到数据库');
       res.json({ success: true, data: newRecord })
     } else {
       // 使用文件存储
       const records = readRecords()
-      records.push(newRecord)
+      
+      // 确保记录格式一致
+      const standardRecord = {
+        id: newRecord.id,
+        date: newRecord.date,
+        type: newRecord.type,
+        value: Number(newRecord.value),
+        unit: newRecord.unit || '',
+        remark: newRecord.remark || null,
+        userId: newRecord.userId,
+        createdAt: newRecord.createdAt
+      }
+      
+      records.push(standardRecord)
+      
+      console.log(`添加记录到文件存储, 当前记录数: ${records.length}`);
       
       if (writeRecords(records)) {
-        res.json({ success: true, data: newRecord })
+        console.log('记录已成功写入文件');
+        res.json({ success: true, data: standardRecord })
       } else {
+        console.error('写入文件失败');
         res.status(500).json({ success: false, message: '保存记录失败' })
       }
     }
   } catch (error) {
     console.error('添加健康记录失败:', error)
-    res.status(500).json({ success: false, message: '添加记录失败' })
+    res.status(500).json({ 
+      success: false, 
+      message: '添加记录失败', 
+      error: error.message 
+    })
   }
 })
 

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import IndicatorChart from '../components/IndicatorChart.vue'
 
@@ -26,15 +26,26 @@ const indicatorMeta = {
 
 const fetchRecords = async () => {
   try {
+    console.log('详情页获取记录:', indicatorId.value);
     const response = await fetch('http://localhost:3001/api/health-records')
     const { data } = await response.json()
+    console.log('详情页获取到原始数据:', data ? data.length : 0, '条记录');
+    
     if (Array.isArray(data)) {
-      records.value = data
+      const filteredRecords = data
         .filter(r => r.type === indicatorId.value)
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      
+      console.log(`详情页过滤出${indicatorId.value}类型的记录:`, filteredRecords.length, '条记录');
+      
+      records.value = filteredRecords
+    } else {
+      console.warn('详情页接收到非数组格式的数据:', data);
+      records.value = []
     }
   } catch (error) {
-    console.error('获取记录失败:', error)
+    console.error('详情页获取记录失败:', error)
+    records.value = []
   }
 }
 
@@ -85,6 +96,29 @@ onMounted(async () => {
   }
   await fetchRecords()
   await fetchAiAnalysis()
+  
+  // 添加事件监听器，监听记录更新事件
+  window.addEventListener('health-record-updated', (event) => {
+    console.log('指标详情页接收到记录更新事件', event.detail)
+    if (event.detail && event.detail.type === indicatorId.value) {
+      console.log('更新的记录类型与当前详情页匹配，刷新数据')
+      fetchRecords()
+      fetchAiAnalysis()
+    }
+  })
+  
+  // 添加详情页直接刷新事件监听器
+  window.addEventListener('indicator-detail-refresh', (event) => {
+    console.log('接收到详情页刷新事件', event.detail)
+    fetchRecords()
+    fetchAiAnalysis()
+  })
+})
+
+onUnmounted(() => {
+  // 移除事件监听器
+  window.removeEventListener('health-record-updated', fetchRecords)
+  window.removeEventListener('indicator-detail-refresh', fetchRecords)
 })
 
 watch(() => route.params.id, async () => {

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch, nextTick } from 'vue'
+import { ref, onMounted, watch, nextTick, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 import axios from 'axios'
 
@@ -45,9 +45,12 @@ const indicators = [
 const fetchRecordData = async () => {
   try {
     const response = await axios.get('/api/health-records')
+    console.log('图表数据API响应:', response)
+    
     if (response.data && Array.isArray(response.data.data)) {
       // 添加日期验证函数
       const isValidDate = (dateStr) => {
+        if (!dateStr) return false
         try {
           const time = new Date(dateStr)
           return !isNaN(time.getTime())
@@ -60,10 +63,18 @@ const fetchRecordData = async () => {
       const filteredRecords = response.data.data
         .filter(record => 
           record.type === selectedIndicator.value && 
-          record.date && 
-          isValidDate(record.date)
+          ((record.date && isValidDate(record.date)) || 
+          (record.createdAt && isValidDate(record.createdAt)))
         )
+        .map(record => ({
+          ...record,
+          date: record.date || (record.createdAt ? record.createdAt.split('T')[0] : null),
+          value: Number(record.value)
+        }))
+        .filter(record => record.date !== null)
         .sort((a, b) => new Date(a.date) - new Date(b.date))
+      
+      console.log('过滤后的指标记录:', filteredRecords)
       
       // 提取日期和值
       chartData.value = {
@@ -210,7 +221,25 @@ onMounted(async () => {
     window.addEventListener('resize', () => {
       chart?.resize()
     })
+    
+    // 添加记录更新事件监听
+    window.addEventListener('health-record-updated', (event) => {
+      console.log('图表组件接收到记录更新事件', event.detail)
+      if (event.detail && event.detail.type === selectedIndicator.value) {
+        console.log('更新的记录类型与当前图表匹配，刷新数据')
+        fetchRecordData()
+      }
+    })
   }, 100)
+})
+
+// 在组件卸载时移除事件监听
+onUnmounted(() => {
+  window.removeEventListener('resize', () => chart?.resize())
+  window.removeEventListener('health-record-updated', fetchRecordData)
+  if (chart) {
+    chart.dispose()
+  }
 })
 </script>
 

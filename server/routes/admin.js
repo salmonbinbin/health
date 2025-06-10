@@ -398,7 +398,7 @@ router.post('/users/:userId/disable', requireAdmin, async (req, res) => {
         // 如果数据库操作失败，回退到文件存储
         console.log('数据库操作失败，切换到文件存储模式')
         useDatabase = false
-      }
+            }
     }
     
     // 使用文件存储（当数据库不可用或操作失败时）
@@ -593,7 +593,7 @@ router.post('/users/:userId/enable', requireAdmin, async (req, res) => {
       }
     }
     
-    // 使用文件存储（当数据库不可用或操作失败时）
+        // 使用文件存储（当数据库不可用或操作失败时）
     if (!useDatabase) {
       const users = readUsers()
       console.log(`从文件读取到 ${users.length} 个用户`)

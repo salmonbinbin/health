@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { healthRecordApi } from '@/utils/api'
 import { ElMessage } from 'element-plus'
@@ -25,70 +25,53 @@ const indicatorMap = {
 const fetchRecords = async () => {
   loading.value = true
   try {
-    const response = await healthRecordApi.getList()
-    console.log('API响应数据:', response)
+    const response = await fetch('http://localhost:3001/api/health-records')
+    const data = await response.json()
+    console.log('API响应数据:', data)
 
     // 检查响应数据结构
-    if (!response || !response.data) {
-      console.error('API返回数据格式错误:', response)
+    if (!data || !data.data) {
+      console.error('API返回数据格式错误:', data)
       ElMessage.error('获取记录失败：数据格式错误')
       records.value = []
       return
     }
 
     // 确保数据是数组
-    const recordsData = Array.isArray(response.data) ? response.data : []
+    let recordsData = Array.isArray(data.data) ? data.data : []
     console.log('处理前的记录数据:', recordsData)
 
-    // 按指标类型分组，只保留每个指标的最新有效记录
-    const latestRecords = {}
-    
-    recordsData.forEach(record => {
-      // 跳过无效记录
-      if (!record || !record.type || !record.value) {
-        console.warn('跳过无效记录:', record)
-        return
-      }
-
-      // 标准化日期
-      const recordDate = record.date || record.createdAt?.split('T')[0]
-      if (!recordDate) {
-        console.warn('跳过无日期记录:', record)
-        return
-      }
-
-      try {
-        const time = new Date(recordDate)
-        if (isNaN(time.getTime())) {
-          console.warn('跳过无效日期记录:', record)
-          return
-        }
-
-        // 构建标准化记录
-        const validRecord = {
+    // 过滤有效记录并标准化
+    const validRecords = recordsData
+      .filter(record => record && record.type && record.value !== undefined && record.value !== null)
+      .map(record => {
+        // 标准化日期
+        const recordDate = record.date || record.createdAt?.split('T')[0] || new Date().toISOString().split('T')[0]
+        
+        return {
           id: record.id || Date.now().toString(),
           type: record.type,
           value: Number(record.value),
-          unit: record.unit || indicatorMap[record.type]?.unit || '',
+          unit: record.unit || '',
           date: recordDate,
           createdAt: record.createdAt || recordDate,
           remark: record.remark || ''
         }
+      })
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    
+    console.log('处理后的有效记录:', validRecords)
 
-        // 更新最新记录
-        if (!latestRecords[validRecord.type] || 
-            new Date(validRecord.createdAt) > new Date(latestRecords[validRecord.type].createdAt)) {
-          latestRecords[validRecord.type] = validRecord
-        }
-      } catch (error) {
-        console.warn('记录处理错误:', error, record)
+    // 按指标类型分组，每种类型只显示最新一条
+    const latestByType = {}
+    validRecords.forEach(record => {
+      if (!latestByType[record.type] || 
+          new Date(record.createdAt) > new Date(latestByType[record.type].createdAt)) {
+        latestByType[record.type] = record
       }
     })
 
-    const validRecords = Object.values(latestRecords)
-    console.log('处理后的有效记录:', validRecords)
-
-    records.value = validRecords
+    records.value = Object.values(latestByType)
   } catch (error) {
     console.error('获取记录失败:', error)
     ElMessage.error('获取记录失败：' + (error.message || '未知错误'))
@@ -100,54 +83,43 @@ const fetchRecords = async () => {
 
 const viewHistory = async (type) => {
   try {
-    const response = await healthRecordApi.getList()
-    console.log('历史记录API响应:', response) // 添加日志
+    const response = await fetch('http://localhost:3001/api/health-records')
+    const data = await response.json()
+    console.log('历史记录API响应:', data)
 
-    if (!response || !response.data) {
-      console.error('历史记录API返回数据格式错误:', response)
+    // 检查响应数据结构
+    if (!data || !data.data) {
+      console.error('历史记录API返回数据格式错误:', data)
       ElMessage.error('获取历史记录失败：数据格式错误')
       historyRecords.value = []
       return
     }
 
-    const recordsData = Array.isArray(response.data) ? response.data : []
+    // 确保数据是数组
+    let recordsData = Array.isArray(data.data) ? data.data : []
 
-    // 添加日期验证
-    const isValidDate = (dateStr) => {
-      if (!dateStr) return false
-      try {
-        const time = new Date(dateStr)
-        return !isNaN(time.getTime())
-      } catch {
-        return false
-      }
-    }
-
-    const validRecords = recordsData
-      .filter(record => 
-        record && 
-        record.type === type && 
-        record.createdAt && 
-        isValidDate(record.createdAt)
-      )
-      .map(record => ({
-        id: record.id || Date.now().toString(),
-        type: record.type,
-        value: record.value,
-        unit: record.unit || '',
-        createdAt: record.createdAt,
-        date: record.date || record.createdAt.split('T')[0],
-        remark: record.remark || ''
-      }))
+    // 过滤出指定类型的有效记录
+    const typeRecords = recordsData
+      .filter(record => record && record.type === type)
+      .map(record => {
+        // 标准化日期
+        const recordDate = record.date || record.createdAt?.split('T')[0] || new Date().toISOString().split('T')[0]
+        
+        return {
+          id: record.id || Date.now().toString(),
+          type: record.type,
+          value: Number(record.value),
+          unit: record.unit || indicatorMap[record.type]?.unit || '',
+          date: recordDate,
+          createdAt: record.createdAt || recordDate,
+          remark: record.remark || ''
+        }
+      })
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    
+    console.log('处理后的类型历史记录:', typeRecords)
 
-    console.log('处理后的有效历史记录:', validRecords) // 添加日志
-
-    if (validRecords.length === 0) {
-      console.warn('没有找到有效的历史记录')
-    }
-
-    historyRecords.value = validRecords
+    historyRecords.value = typeRecords
     currentIndicator.value = indicatorMap[type]
     showHistoryDialog.value = true
   } catch (error) {
@@ -185,7 +157,19 @@ const goBack = () => {
   router.back()
 }
 
-onMounted(fetchRecords)
+onMounted(() => {
+  fetchRecords()
+  
+  // 添加事件监听，当健康记录更新时刷新数据
+  window.addEventListener('health-record-updated', () => {
+    console.log('我的记录-接收到健康记录更新事件，刷新数据')
+    fetchRecords()
+  })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('health-record-updated', fetchRecords)
+})
 </script>
 
 <template>
@@ -232,6 +216,13 @@ onMounted(fetchRecords)
           </el-button>
         </template>
       </el-table-column>
+      
+      <template #empty>
+        <div class="empty-data">
+          <p>暂无记录数据</p>
+          <el-button type="primary" @click="router.push('/health-record')">添加记录</el-button>
+        </div>
+      </template>
     </el-table>
 
     <el-dialog
@@ -339,5 +330,16 @@ onMounted(fetchRecords)
 
 :deep(.el-dialog__body) {
   padding: 24px;
+}
+
+.empty-data {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.empty-data p {
+  color: #909399;
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 </style> 

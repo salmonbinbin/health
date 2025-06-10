@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, reactive, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { healthRecordApi } from '@/utils/api'
@@ -90,15 +90,35 @@ const handleSave = async () => {
     const record = {
       type: currentIndicator.value.id,
       value: Number(recordValue.value),
-      unit: currentIndicator.value.unit,
+      unit: currentIndicator.value.unit || '',
       remark: remark.value || null,
-      date: recordDate.value
+      date: recordDate.value || new Date().toISOString().split('T')[0],
+      createdAt: new Date().toISOString()
     }
 
-    await healthRecordApi.add(record)
+    const response = await healthRecordApi.add(record)
     ElMessage.success('添加成功')
     showDialog.value = false
+    
+    recordValue.value = ''
+    remark.value = ''
+    
+    const event = new CustomEvent('health-record-updated', { 
+      detail: { record, type: record.type }
+    });
+    window.dispatchEvent(event);
+    
+    if (router.currentRoute.value.name === 'indicator-detail') {
+      console.log('在详情页添加记录，刷新数据');
+      if (router.currentRoute.value.params.id === record.type) {
+        const detailEvent = new CustomEvent('indicator-detail-refresh', { 
+          detail: { indicator: record.type }
+        });
+        window.dispatchEvent(detailEvent);
+      }
+    }
   } catch (error) {
+    console.error('添加记录失败:', error)
     ElMessage.error('添加失败')
   }
 }

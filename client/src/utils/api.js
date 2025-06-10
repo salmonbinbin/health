@@ -93,7 +93,7 @@ api.interceptors.request.use(
         ...config.headers,
         Authorization: `Bearer admin-token`
       }
-      return config
+    return config
     }
     
     // 普通用户处理
@@ -103,6 +103,26 @@ api.interceptors.request.use(
     config.headers = {
       ...config.headers,
       ...headers
+    }
+    
+    // 处理请求数据，将undefined转换为null
+    if (config.method === 'post' && config.data) {
+      // 递归处理对象中的undefined值
+      const processData = (obj) => {
+        const result = {}
+        for (const key in obj) {
+          if (obj[key] === undefined) {
+            result[key] = null
+          } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+            result[key] = processData(obj[key])
+          } else {
+            result[key] = obj[key]
+          }
+        }
+        return result
+      }
+      
+      config.data = processData(config.data)
     }
     
     return config
@@ -167,11 +187,39 @@ export const healthRecordApi = {
   // 获取健康记录列表
   getList() {
     return api.get('/health-records')
+      .then(response => {
+        console.log('API获取记录列表响应:', response)
+        // 确保返回格式一致
+        return response
+      })
+      .catch(error => {
+        console.error('获取健康记录列表失败:', error)
+        throw error
+      })
   },
   
   // 添加健康记录
   add(record) {
-    return api.post('/health-records', record)
+    // 预处理记录数据，确保字段有效
+    const validRecord = {
+      ...record,
+      unit: record.unit || '',
+      remark: record.remark === undefined ? null : record.remark,
+      date: record.date || new Date().toISOString().split('T')[0],
+      createdAt: record.createdAt || new Date().toISOString()
+    }
+    
+    console.log('发送添加记录请求:', validRecord)
+    
+    return api.post('/health-records', validRecord)
+      .then(response => {
+        console.log('添加记录响应:', response)
+        return response
+      })
+      .catch(error => {
+        console.error('添加健康记录失败:', error)
+        throw error
+      })
   }
 }
 
